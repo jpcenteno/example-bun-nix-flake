@@ -32,6 +32,8 @@
           buildInputs = [ pkgs.bun ];
         };
 
+        packages.default = hello-bun;
+
         # Define the default app to run the binary
         apps.default = {
           type = "app";
