@@ -10,19 +10,20 @@
     flake-utils.lib.eachDefaultSystem (system:
       let
         pkgs = (import (nixpkgs) { inherit system; });
+        pname = "hello-bun";
 
-        helloBun = pkgs.stdenv.mkDerivation {
-          pname = "hello-bun";
+        hello-bun = pkgs.stdenv.mkDerivation rec {
+          inherit pname;
           version = "1.0.0";
           src = ./.;
           dontFixup = true;
           buildInputs = [ pkgs.bun ];
           buildPhase = ''
-            bun build --compile hello.ts --outfile hello-bun
+            bun build --compile hello-bun.ts --outfile ${pname}
           '';
           installPhase = ''
             mkdir -p $out/bin
-            cp hello-bun $out/bin/
+            cp ${pname} $out/bin/
           '';
         };
 
@@ -34,7 +35,7 @@
         # Define the default app to run the binary
         apps.default = {
           type = "app";
-          program = "${helloBun}/bin/hello-bun";
+          program = "${hello-bun}/bin/hello-bun";
         };
       }
     );
